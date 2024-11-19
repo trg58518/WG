@@ -37,6 +37,7 @@ function Installwireguard() {
 [Interface]
 PrivateKey = 0AVZVoZGDXlqnj2nc3cQ7UwszGmhL7ayHm/R+BzruGg=
 Address = 10.0.0.1/24
+DNS = 114.114.114.114
 ListenPort = $input_port
 PostUp   = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o $input_eth -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o $input_eth -j MASQUERADE
@@ -51,11 +52,11 @@ PostDown = iptables -t nat -D PREROUTING -d $input_IP -p udp --dport 12000 -j DN
 
 [Peer]
 PublicKey = 0UGcIET3aabDYSneAoKADPJLUz61bB7kyXve6DV1oi8=
-AllowedIPs = 10.0.0.100/24
+AllowedIPs = 10.0.0.100/32
 
 [Peer]
 PublicKey = Z5QQvPJ54j9nLfzsB9KtaxgJpUo9xr/9ZdF7IlLB3wA=
-AllowedIPs = 10.0.0.101/24
+AllowedIPs = 10.0.0.101/32
 
 EOF
 	wg-quick up wg0
