@@ -37,7 +37,7 @@ function Installwireguard() {
 [Interface]
 PrivateKey = 0AVZVoZGDXlqnj2nc3cQ7UwszGmhL7ayHm/R+BzruGg=
 Address = 10.0.0.1/24
-ListenPort = 7678
+ListenPort = ${input_port}
 DNS = 114.114.114.114
 
 PostUp   = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o ${input_eth} -j MASQUERADE
