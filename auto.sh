@@ -102,39 +102,6 @@ EOF
 
 }
 
-function abcdefg() {
-	local WG_port=${input_port}
-	read -p "请输入WG的端口  默认:${WG_port}   " input_WG_port
-	[ -z "${input_WG_port}" ] && input_WG_port=${WG_port}
-	
-	local UDP2Raw_port=20240
-	read -p "请输入UDP2Raw的通信端口  默认:${UDP2Raw_port}   " input_UDP2Raw_port
-	[ -z "${input_UDP2Raw_port}" ] && input_UDP2Raw_port=${UDP2Raw_port}
-	
-	
-	mkdir /usr/udp2raw
-	cd /usr/udp2raw
-	wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz -O udp2raw_binaries.tar.gz
-	tar -zxvf udp2raw_binaries.tar.gz
-	cat >/etc/systemd/system/udp2raw.service <<EOF
-[Unit]
-Description=udp2raw
-After=network.target
-[Service]
-Type=simple
-ExecStart=/usr/udp2raw/udp2raw_amd64 -s -l0.0.0.0:${input_UDP2Raw_port} -r 127.0.0.1:${input_WG_port} -k aa123123 --raw-mode faketcp -a
-Restart=always
-RestartSec=10
-AmbientCapabilities=CAP_NET_BIND_SERVICE
-[Install]
-WantedBy=multi-user.target
-EOF
-	chmod 777 /etc/systemd/system/udp2raw.service
-	systemctl daemon-reload
-	systemctl enable udp2raw
-
-}
-
 
 function get_ip() {
     public_ip=$(ip a | grep inet | grep -v inet6 | grep -v '127.0.0.1' | grep -v '10.0.0.1' | awk '{print $2}' | awk -F / '{print$1}')
@@ -144,10 +111,16 @@ function get_ip() {
 Start() {
 	while true;do
 		echo "1. 一键安装Wireguard"
+		echo "2. 一键安装Wireguard和UDP2Raw"
 		echo "8. 退出"
 		read -p "(请选择您需要的操作:" input_provider
 		if [ ${input_provider} == 1 ]; then
 			Installwireguard
+			break
+		fi
+		if [ ${input_provider} == 2 ]; then
+			Installwireguard
+			Installudp2raw
 			break
 		fi
 
