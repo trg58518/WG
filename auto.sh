@@ -81,7 +81,7 @@ function Installudp2raw() {
 	
 	mkdir /usr/udp2raw
 	cd /usr/udp2raw
-	wget https://mirror.ghproxy.com/https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz -O udp2raw_binaries.tar.gz
+	wget https://github.com/wangyu-/udp2raw/releases/download/20230206.0/udp2raw_binaries.tar.gz -O udp2raw_binaries.tar.gz
 	tar -zxvf udp2raw_binaries.tar.gz
 	cat >/etc/systemd/system/udp2raw.service <<EOF
 [Unit]
